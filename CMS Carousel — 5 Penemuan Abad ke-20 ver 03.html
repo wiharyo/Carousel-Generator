@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CMS Carousel — 5 Penemuan Abad ke-20</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Poppins:wght@400;600;700&display=swap">
+<style>
+:root{--bg:#f6f4f0;--pn:#fff;--ink:#26221d;--soft:#6b6459;--ln:#d9d4ca;--ac:#b4401f;--ai:#fff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#16140f;--pn:#211e18;--ink:#eee9df;--soft:#a39b8c;--ln:#38332a;--ac:#e0704a;--ai:#1a0f0a}}
+:root[data-theme="dark"]{--bg:#16140f;--pn:#211e18;--ink:#eee9df;--soft:#a39b8c;--ln:#38332a;--ac:#e0704a;--ai:#1a0f0a}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Poppins,system-ui,sans-serif;line-height:1.45}
+header{max-width:1100px;margin:0 auto;padding:20px 16px 8px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+h1{font-family:'Playfair Display',Georgia,serif;font-size:1.5rem;margin:0}
+#st{font-size:.82rem;color:var(--soft)}
+main{max-width:1100px;margin:0 auto;padding:8px 16px 40px;display:grid;grid-template-columns:1fr 460px;gap:24px;align-items:start}
+@media(max-width:900px){main{grid-template-columns:1fr}}
+button{font:inherit;font-size:.9rem;min-height:44px;padding:0 14px;border-radius:10px;border:1px solid var(--ln);background:var(--pn);color:var(--ink);cursor:pointer}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--ac);outline-offset:2px}
+button.pri{background:var(--ac);color:var(--ai);border-color:var(--ac);font-weight:600}
+button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tabs,.tools{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.card{background:var(--pn);border:1px solid var(--ln);border-radius:14px;padding:16px}
+label{display:block;font-size:.82rem;font-weight:600;color:var(--soft);margin-bottom:12px}
+#pc{display:block;max-width:100%;max-height:72vh;width:auto;height:auto;border:1px solid var(--ln);border-radius:6px}
+input,textarea,select{display:block;width:100%;margin-top:4px;font:inherit;font-size:.95rem;color:var(--ink);background:var(--bg);border:1px solid var(--ln);border-radius:8px;padding:9px 10px;font-weight:400;resize:vertical}
+.pts>b{display:block;font-size:.82rem;color:var(--soft);margin-bottom:6px}
+.pr{display:grid;grid-template-columns:92px 1fr 44px;gap:6px;margin-bottom:8px;align-items:start}
+.pr input,.pr textarea{margin-top:0}
+.pr button{padding:0}
+.pts>button{margin-bottom:14px}
+.pv{position:sticky;top:12px}
+#pw{width:100%;max-width:460px;position:relative;overflow:hidden;border-radius:6px;border:1px solid var(--ln)}
+#pi{width:1080px;height:1350px;transform-origin:0 0;position:absolute;left:0;top:0}
+.note{font-size:.8rem;color:var(--soft);margin-top:10px}
+</style>
+</head>
+<body>
+<header><h1>CMS Carousel</h1><span id="st" role="status">Memuat…</span></header>
+<main>
+<section>
+<div class="tabs" id="tabs"></div>
+<div class="tools" id="tools">
+<button data-a="up">↑ Naikkan</button><button data-a="down">↓ Turunkan</button><button data-a="add">+ Slide baru</button><button data-a="rm">Hapus slide</button>
+</div>
+<div class="card" id="form"></div>
+</section>
+<aside class="pv">
+<div class="card" style="margin-bottom:12px"><label>Platform<select id="pf"></select></label><label>Rasio<select id="rt"></select></label><label style="display:flex;gap:8px;align-items:center;margin:0"><input type="checkbox" id="sz" checked style="width:auto;margin:0"> Tampilkan zona aman di pratinjau</label><p class="note" id="fn"></p></div>
+<canvas id="pc" aria-label="Pratinjau slide"></canvas>
+<div class="tools" style="margin-top:12px"><button class="pri" data-a="png">Unduh PNG slide ini</button><button data-a="all">Unduh semua</button><button data-a="reset">Reset ke awal</button></div>
+<p class="note">Perubahan tersimpan otomatis. Tiap unduhan meminta konfirmasi dari browser. Pratinjau sama dengan hasil PNG. Area merah hanya tampil di pratinjau.</p>
+</aside>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script>
+var C0='#eeece8',BR='#b4401f',GD='#8f7219',TX='#7a6010',IK='#26221d';
+var DEF=[
+{t:'c',kicker:'Bukan penemuan satu orang.',title:'5 Penemuan Abad ke-20 yang Mengubah Dunia',intro:'Wujudnya, boleh jadi buatan satu orang, satu entitas, atau apa pun namanya. Tapi, semua penemuan berikut ini adalah salah satu titik perhentian dari proses panjang dan banyak kepala.'},
+{t:'s',title:'Kulkas Listrik Butuh 165 Tahun dari Percobaan Pertama',stat:'99,5%',label:'rumah di Amerika kini punya kulkas listrik. Versi rumahan pertama dipatenkan Fred Wolf pada 1913.',pts:[['1748','William Cullen mendidihkan dietil eter dalam ruang hampa untuk mendinginkan sekitarnya.'],['1834','Jacob Perkins mematenkan sistem kompresi uap, prinsip yang masih dipakai kulkas sekarang.'],['1882','Kapal Dunedin dipasangi unit pendingin, memicu ekspor daging dan susu.'],['1913','Kulkas Wolf dijual $500–1.000 (± Rp9–18 juta, kurs ± Rp18.000 per dolar AS).']],close:'',src:'Sumber: HistoryFacts; sumber sekunder sejarah pendinginan'},
+{t:'s',title:'TV Meledak Karena Siaran, Bukan Kotaknya',stat:'30 juta+',label:'penonton siaran TV lintas benua pertama: pidato Truman, 4 September 1951.',pts:[['1884–97','Nipkow mematenkan cakram TV mekanis; Braun menemukan tabung sinar katoda.'],['1927','Farnsworth menyempurnakan TV elektronik penuh.'],['1936','BBC membuka siaran reguler beresolusi tinggi pertama, 405 garis.'],['1941','WNBT menayangkan iklan TV pertama (Bulova, tarif $9).'],['1948–52','Rumah ber-TV di AS melonjak dari kurang dari 1% jadi 32%.']],close:'',src:'Sumber: History.com; EBSCO; Television Academy. Klaim “pertama” diperdebatkan.'},
+{t:'s',title:'Dari Glider ke Bulan dalam 66 Tahun',stat:'12 detik',label:'penerbangan pertama Wright bersaudara: 120 kaki (±36 m), 17 Desember 1903.',pts:[['1896','Wafatnya perintis glider Otto Lilienthal memicu mereka serius mengejar penerbangan.'],['1901','Glider besar mereka terbang 315 kaki (±96 m) selama 19 detik.'],['1902','50 luncuran melahirkan sistem kemudi dan elevator.'],['1903','Mesin 12 tenaga kuda seberat 180 pon, dibuat sendiri setelah mencari ke selusin produsen.'],['1969','Apollo 11 mendarat di bulan, 66 tahun kemudian.']],close:'',src:'Sumber: arsip Wright Brothers (CAP, MSU); HistoryFacts'},
+{t:'s',title:'PC Bermula dari Satu Transistor',stat:'1 → 2.300',label:'transistor di dunia tahun 1947, lalu 2.300 dalam satu chip Intel 4004 (1971).',pts:[['1947','Bardeen, Brattain, dan Shockley menciptakan transistor pertama di Bell Labs.'],['1958','IC pertama (Kilby, Noyce) mengatasi “tyranny of numbers”: kabel antartransistor makin kusut.'],['1971','Intel 4004: 60.000 operasi per detik, harga $200. Kenbak-1 laku hanya 40 unit.'],['1977–93','Apple II terjual hampir 6 juta unit.']],close:'',src:'Sumber: HistoryFacts; Computer Hope; BlueSci'},
+{t:'s',title:'Pesan Pertama Internet Cuma Dua Huruf',stat:'LO',label:'pesan pertama ARPANET, 29 Oktober 1969. Seharusnya LOGIN, tapi sistem keburu crash.',pts:[['1968','Donald Davies mempresentasikan packet switching: data dipecah jadi blok-blok.'],['Des 1969','ARPANET punya 4 node: UCLA, SRI, UC Santa Barbara, dan Universitas Utah.'],['1974','Cerf dan Kahn menerbitkan spesifikasi TCP/IP.'],['1 Jan 1983','ARPANET resmi memakai TCP/IP.'],['1989–91','Tim Berners-Lee menciptakan World Wide Web di CERN.']],close:'',src:'Sumber: History.com; PCWorld'},
+{t:'s',title:'Benang Merahnya: Listrik',stat:'59',label:'pelanggan pertama pembangkit Pearl Street milik Edison, New York, 1882 (±3.000 lampu).',pts:[['1831','Michael Faraday menemukan induksi elektromagnetik, dasar generator dan transformator.'],['1882','Thomas Edison membangun pembangkit listrik Pearl Street di New York.']],close:'Kulkas, TV, komputer, dan internet: semuanya bergantung pada listrik.',src:'Sumber: Wikipedia (Power Engineering); Institute for Energy Research'},
+{t:'q',kicker:'Sumber',title:'Mau Baca Artikel Aslinya?',url:'https://historyfacts.com/science-industry/article/20th-century-inventions-that-changed-the-world/',label:'Pindai QR atau buka artikel aslinya:',note:'historyfacts.com/science-industry/article/20th-century-inventions-that-changed-the-world/',src:'Sumber pendukung: History.com, EBSCO, Television Academy, Computer Hope, PCWorld, Wikipedia.'}
+];
+var PL={none:{n:'Umum (tanpa platform)',d:'4:5',ok:['4:5','1:1','3:4','9:16','16:9'],i:[.053,.036,.078,.078]},igf:{n:'Instagram Feed',d:'4:5',ok:['4:5','1:1','3:4'],i:[.07,.05,.06,.06]},igs:{n:'Instagram Story',d:'9:16',ok:['9:16'],i:[.13,.2,.06,.06]},igr:{n:'Instagram Reels',d:'9:16',ok:['9:16'],i:[.14,.35,.06,.12]},tt:{n:'TikTok',d:'9:16',ok:['9:16'],i:[.08,.25,.06,.13]},ys:{n:'YouTube Shorts',d:'9:16',ok:['9:16'],i:[.1,.22,.06,.12]},yt:{n:'YouTube (video)',d:'16:9',ok:['16:9'],i:[.07,.11,.06,.06]},th:{n:'Threads',d:'4:5',ok:['4:5','1:1'],i:[.06,.06,.06,.06]},li:{n:'LinkedIn',d:'4:5',ok:['4:5','1:1'],i:[.05,.05,.06,.06]}};
+var RT={'4:5':[1080,1350],'1:1':[1080,1080],'3:4':[1080,1440],'9:16':[1080,1920],'16:9':[1920,1080]};
+var F={p:'none',r:'4:5'};
+var KEY='carousel5-v1',S=null,cur=0,ref=null,tm=null,$=function(i){return document.getElementById(i)};
+function clone(o){return JSON.parse(JSON.stringify(o))}
+function e(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function norm(d){if(d&&d.f&&PL[d.f.p]&&RT[d.f.r])F=d.f;var a=Array.isArray(d)?d.slice():(d&&d.s);if(!Array.isArray(a)||!a.length)return null;if(Array.isArray(d)&&!a.some(function(s){return s.t==='q'}))a.push(clone(DEF[DEF.length-1]));var N=a.filter(function(s){return s.t==='s'}).length,k=0;a.forEach(function(s){if(s.t==='s'){k++;if(s.tag===undefined)s.tag=k+'/'+N}});return a}
+function qrm(u){try{var q=qrcode(0,'M');q.addData(u);q.make();var n=q.getModuleCount(),m=[];for(var r=0;r<n;r++){m.push([]);for(var c=0;c<n;c++)m[r].push(q.isDark(r,c))}return m}catch(x){return null}}
+function qrsvg(u,px){var m=qrm(u);if(!m)return '';var n=m.length,d='';m.forEach(function(row,r){var c=0;while(c<n){if(row[c]){var s=c;while(c<n&&row[c])c++;d+='M'+s+' '+r+'h'+(c-s)+'v1h-'+(c-s)+'z'}else c++}});return '<svg viewBox="0 0 '+n+' '+n+'" width="'+px+'" height="'+px+'" shape-rendering="crispEdges" role="img" aria-label="QR code menuju artikel sumber"><path d="'+d+'" fill="#111"/></svg>'}
+try{var raw=localStorage.getItem(KEY);if(raw)S=norm(JSON.parse(raw))}catch(x){}
+if(!S)S=norm(clone(DEF));
+function num(i){var n=0;for(var k=0;k<=i;k++)if(S[k].t==='s')n++;return n}
+function tot(){return S.filter(function(s){return s.t==='s'}).length}
+function status(t){$('st').textContent=t}
+function save(){status('Menyimpan…');clearTimeout(tm);tm=setTimeout(function(){var j=JSON.stringify({v:3,s:S,f:F});try{localStorage.setItem(KEY,j)}catch(x){}
+if(ref){ref.set({json:j}).then(function(){status('Tersimpan')},function(){status('Tersimpan di browser ini saja')})}else status('Tersimpan di browser ini')},700)}
+function preview(){render(cur,$('pc'),$('sz').checked)}
+function tabs(){$('tabs').innerHTML=S.map(function(s,i){return '<button data-tab="'+i+'" aria-pressed="'+(i===cur)+'">'+(s.t==='c'?'Cover':s.t==='q'?'Sumber':num(i))+'</button>'}).join('')}
+function form(){var s=S[cur],h='';
+function f(k,l,ta){return '<label>'+l+(ta?'<textarea data-k="'+k+'" rows="2">'+e(s[k])+'</textarea>':'<input data-k="'+k+'" value="'+e(s[k])+'">')+'</label>'}
+if(s.t==='c')h=f('kicker','Kalimat kecil di atas')+f('title','Judul',1)+f('intro','Intro',1);
+else if(s.t==='q')h=f('kicker','Label kecil')+f('title','Judul',1)+f('url','Alamat tujuan QR code')+f('label','Ajakan di bawah QR',1)+f('note','Teks alamat yang ditampilkan',1)+f('src','Sumber pendukung',1);
+else{h=f('tag','Label kecil di atas (mis. 1/6, boleh kosong)')+f('title','Judul',1)+f('stat','Angka besar')+f('label','Keterangan angka',1)+'<div class="pts"><b>Poin timeline (tahun + isi)</b>'+s.pts.map(function(p,i){return '<div class="pr"><input data-p="'+i+'" data-q="0" value="'+e(p[0])+'" aria-label="Tahun"><textarea data-p="'+i+'" data-q="1" rows="2" aria-label="Isi poin">'+e(p[1])+'</textarea><button data-del="'+i+'" aria-label="Hapus poin">×</button></div>'}).join('')+'<button data-addp>+ Tambah poin</button></div>'+f('close','Kalimat penutup (boleh kosong)',1)+f('src','Sumber')}
+$('form').innerHTML=h}
+function all(){tabs();form();preview()}
+$('form').addEventListener('input',function(ev){var t=ev.target,s=S[cur];if(t.dataset.k)s[t.dataset.k]=t.value;else if(t.dataset.p!==undefined)s.pts[+t.dataset.p][+t.dataset.q]=t.value;preview();save()});
+$('form').addEventListener('click',function(ev){var t=ev.target.closest('button');if(!t)return;var s=S[cur];if(t.dataset.del!==undefined)s.pts.splice(+t.dataset.del,1);else if(t.hasAttribute('data-addp'))s.pts.push(['Tahun','Isi poin']);else return;form();preview();save()});
+$('tabs').addEventListener('click',function(ev){var t=ev.target.closest('button');if(!t)return;cur=+t.dataset.tab;all()});
+function wrap(c,t,x,y,mw,lh,fs,off,dry){var l='',o=off||0,w,tr,words=String(t).split(/\s+/);for(var i=0;i<words.length;i++){w=words[i];tr=l?l+' '+w:w;if(l&&c.measureText(tr).width>mw-o){if(!dry)c.fillText(l,x+o,y+(lh-fs)/2);y+=lh;l=w;o=0}else l=tr}
+if(l){if(!dry)c.fillText(l,x+o,y+(lh-fs)/2);y+=lh}return y}
+function lay(c,s,L,k,dry){
+var u=Math.min(L.W,L.H)/1080*k,PF="'Playfair Display',Georgia,serif",X=L.x,Y=L.y,W=L.w,wide=L.W/L.H>1.3,y,lim=Y+L.h,
+F=function(wt,px,fam,it){c.font=(it?'italic ':'')+wt+' '+Math.round(px*u)+'px '+(fam||'Poppins')},
+R=function(f){if(!dry)f()},
+wr=function(t,x,y,mw,lh,fs,o){return wrap(c,t,x,y,mw,lh*u,fs*u,o||0,dry)},
+pill=function(t,x,y){if(!t)return y+54*u;F(600,28);var w=c.measureText(t).width+48*u;R(function(){c.fillStyle='#3a3733';c.beginPath();c.roundRect(x,y,w,54*u,27*u);c.fill();c.fillStyle='#fff';c.fillText(t,x+24*u,y+13*u)});return y+54*u};
+c.textAlign='left';
+if(s.t==='c'){var cw=wide?W*.72:W;c.fillStyle=GD;F(600,60,PF,1);y=wr(s.kicker,X,Y,cw,72,60)+44*u;R(function(){c.fillStyle=IK;c.fillRect(X,y,340*u,6*u)});y+=50*u;c.fillStyle=IK;F(600,116,PF);y=wr(s.title,X,y,cw,122,116)+56*u;c.fillStyle=TX;F(400,36);y=wr(s.intro,X,y,cw,52,36);return [y,lim]}
+if(s.t==='q'){var m=qrm(s.url),Q=552*u,q=480*u,
+dq=function(bx,by){R(function(){c.fillStyle='#fff';c.beginPath();c.roundRect(bx,by,Q,Q,24*u);c.fill();if(m){var d=q/m.length;c.fillStyle='#111';m.forEach(function(row,r){row.forEach(function(v,j){if(v)c.fillRect(bx+36*u+j*d,by+36*u+r*d,d+.5,d+.5)})})}})},
+nt=String(s.note).replace(/(.{44})/g,'$1 ');
+if(!wide){y=pill(s.kicker,X,Y)+30*u;c.fillStyle=BR;F(600,72,PF);y=wr(s.title,X,y,W,79,72)+44*u;dq(X+(W-Q)/2,y);y+=Q+36*u;c.textAlign='center';c.fillStyle=IK;F(600,34);y=wr(s.label,X+W/2,y,W,48,34);c.fillStyle=TX;F(400,26);y=wr(nt,X+W/2,y+10*u,W,35,26);c.textAlign='left';y=wr(s.src,X,y+18*u,W,35,26);return [y,lim]}
+var lw=W*.5;y=pill(s.kicker,X,Y)+30*u;c.fillStyle=BR;F(600,72,PF);y=wr(s.title,X,y,lw,79,72)+34*u;c.fillStyle=IK;F(600,34);y=wr(s.label,X,y,lw,48,34);c.fillStyle=TX;F(400,26);y=wr(nt,X,y+10*u,lw,35,26);y=wr(s.src,X,y+18*u,lw,35,26);dq(X+W*.5+(W*.5-Q)/2,Y);return [Math.max(y,Y+Q),lim]}
+var head=function(x,y0,w){var y=pill(s.tag,x,y0)+30*u;c.fillStyle=BR;F(600,70,PF);y=wr(s.title,x,y,w,77,70)+34*u;F(700,112);R(function(){c.fillText(s.stat,x,y)});y+=122*u;c.fillStyle=TX;F(400,31);return wr(s.label,x,y,Math.min(w,860*u),42,31)+40*u},
+pts=function(x,y0,w){var y=y0,px=x+44*u;(s.pts||[]).forEach(function(p){F(700,36);c.fillStyle=BR;var yw=c.measureText(p[0]).width+12*u,t=y;R(function(){c.fillText(p[0],px,t+4*u)});F(400,32);c.fillStyle=IK;y=wr(p[1],px,y,w-44*u,44,32,yw)+26*u});
+R(function(){c.strokeStyle=GD;c.lineWidth=4*u;c.setLineDash([12*u,8*u]);c.beginPath();c.moveTo(x+2*u,y0);c.lineTo(x+2*u,y-26*u);c.stroke();c.setLineDash([])});
+if(s.close){c.fillStyle=IK;F(600,34);y=wr(s.close,x,y+8*u,w,48,34)}return y},
+mw=W*.8,sh=0,sy=0;
+if(s.src){F(400,26);sh=wrap(c,s.src,0,0,mw,35*u,26*u,0,true);sy=Y+L.h-sh;lim=sy-24*u}
+if(!wide)y=pts(X,head(X,Y,W),W);else y=Math.max(head(X,Y,W*.46)-40*u,pts(X+W*.52,Y+84*u,W*.48));
+if(s.src)R(function(){F(400,26);c.fillStyle=TX;wrap(c,s.src,X,sy,mw,35*u,26*u,0,false)});
+return [y,lim]}
+function render(i,cv,safe){var s=S[i],p=PL[F.p],z=RT[F.r],W=z[0],H=z[1];cv.width=W;cv.height=H;var c=cv.getContext('2d');c.textBaseline='top';c.fillStyle=C0;c.fillRect(0,0,W,H);
+var L={W:W,H:H,x:W*p.i[2],y:H*p.i[0],w:W*(1-p.i[2]-p.i[3]),h:H*(1-p.i[0]-p.i[1])};
+var k=1,t=document.createElement('canvas').getContext('2d'),r;do{r=lay(t,s,L,k,true);if(r[0]<=r[1])break;k-=.04}while(k>.4);
+lay(c,s,L,k,false);
+if(safe){c.fillStyle='rgba(180,64,31,.16)';c.fillRect(0,0,W,L.y);c.fillRect(0,L.y+L.h,W,H-L.y-L.h);c.fillRect(0,L.y,L.x,L.h);c.fillRect(L.x+L.w,L.y,W-L.x-L.w,L.h);c.strokeStyle=BR;c.lineWidth=3*Math.min(W,H)/1080;c.setLineDash([14,10]);c.strokeRect(L.x,L.y,L.w,L.h);c.setLineDash([])}
+return cv}
+var FP=Promise.all(['700 112px Poppins','400 32px Poppins','600 28px Poppins',"600 70px 'Playfair Display'","italic 600 60px 'Playfair Display'"].map(function(f){return document.fonts.load(f)})).catch(function(){});
+async function draw(i){await FP;var cv=document.createElement('canvas');render(i,cv,false);return new Promise(function(r){cv.toBlob(r,'image/png')})}
+function note(){var p=PL[F.p],i=p.i.map(function(v){return Math.round(v*100)+'%'});$('fn').textContent='Konten dijauhkan dari tepi: atas '+i[0]+', bawah '+i[1]+', kiri '+i[2]+', kanan '+i[3]+' (perkiraan dari panduan umum; tampilan aplikasi platform bisa berubah).'+(p.ok.indexOf(F.r)<0?' Rasio '+F.r+' tidak umum untuk '+p.n+'.':'')}
+function fmt(){var a=$('pf'),b=$('rt');a.innerHTML=Object.keys(PL).map(function(k){return '<option value="'+k+'">'+PL[k].n+'</option>'}).join('');b.innerHTML=Object.keys(RT).map(function(k){return '<option>'+k+'</option>'}).join('');a.value=F.p;b.value=F.r;note()}
+$('pf').onchange=function(){F.p=this.value;F.r=PL[F.p].d;$('rt').value=F.r;note();preview();save()};
+$('rt').onchange=function(){F.r=this.value;note();preview();save()};
+$('sz').onchange=preview;
+var dl=null;
+async function saveOne(i){if(!dl){status('Unduhan tidak tersedia di tampilan ini');return false}
+try{var b=await draw(i);await dl.save({filename:'slide-'+(i+1)+'-'+F.r.replace(':','x')+'.png',data:b});return true}catch(x){status(x&&x.code==='declined'?'Unduhan dibatalkan':'Unduhan gagal');return false}}
+document.addEventListener('click',async function(ev){var b=ev.target.closest('[data-a]');if(!b)return;var a=b.dataset.a;
+if(a==='png'){if(await saveOne(cur))status('Slide diunduh')}
+else if(a==='all'){for(var i=0;i<S.length;i++){if(!(await saveOne(i)))break}}
+else if(a==='reset'){if(confirm('Kembalikan semua slide ke isi awal? Perubahan kamu akan hilang.')){S=norm(clone(DEF));cur=0;all();save()}}
+else if(a==='add'){S.splice(cur+1,0,{t:'s',tag:'',title:'Judul baru',stat:'0',label:'Keterangan angka',pts:[['Tahun','Isi poin']],close:'',src:'Sumber: '});cur++;all();save()}
+else if(a==='rm'){if(S.length>1&&confirm('Hapus slide ini?')){S.splice(cur,1);cur=Math.max(0,cur-1);all();save()}}
+else if(a==='up'&&cur>0){var t=S[cur];S[cur]=S[cur-1];S[cur-1]=t;cur--;all();save()}
+else if(a==='down'&&cur<S.length-1){var t2=S[cur];S[cur]=S[cur+1];S[cur+1]=t2;cur++;all();save()}});
+fmt();all();FP.then(preview);status('Tersimpan di browser ini');
+if(window.claude&&claude.use){
+claude.use('downloads').then(function(d){dl=d}).catch(function(){});
+claude.use('db').then(function(db){if(!db)return;ref=db.doc('deck/content');var first=true;
+ref.onSnapshot(function(snap){if(!first)return;first=false;try{var d=snap&&typeof snap.data==='function'?snap.data():snap;if(d&&d.json){var n=norm(JSON.parse(d.json));if(n){S=n;cur=0;fmt();all();save()}}status('Tersimpan')}catch(x){}},function(){})}).catch(function(){})}
+</script>
+</body>
+</html>
