@@ -133,8 +133,7 @@ $('pf').onchange=function(){F.p=this.value;F.r=PL[F.p].d;$('rt').value=F.r;note(
 $('rt').onchange=function(){F.r=this.value;note();preview();save()};
 $('sz').onchange=preview;
 var dl=null;
-async function saveOne(i){if(!dl){status('Unduhan tidak tersedia di tampilan ini');return false}
-try{var b=await draw(i);await dl.save({filename:'slide-'+(i+1)+'-'+F.r.replace(':','x')+'.png',data:b});return true}catch(x){status(x&&x.code==='declined'?'Unduhan dibatalkan':'Unduhan gagal');return false}}
+async function saveOne(i){try{var b=await draw(i),fn='slide-'+(i+1)+'-'+F.r.replace(':','x')+'.png';if(dl)await dl.save({filename:fn,data:b});else{var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=fn;document.body.appendChild(a);a.click();a.remove();await new Promise(function(r){setTimeout(r,500)});URL.revokeObjectURL(a.href)}return true}catch(x){status(x&&x.code==='declined'?'Unduhan dibatalkan':'Unduhan gagal');return false}}
 document.addEventListener('click',async function(ev){var b=ev.target.closest('[data-a]');if(!b)return;var a=b.dataset.a;
 if(a==='png'){if(await saveOne(cur))status('Slide diunduh')}
 else if(a==='all'){for(var i=0;i<S.length;i++){if(!(await saveOne(i)))break}}
