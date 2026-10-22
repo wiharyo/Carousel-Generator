@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Social Media Content Generator</title>
+<title>CMS Carousel — 5 Penemuan Abad ke-20</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Poppins:wght@400;600;700&display=swap">
 <style>
 :root{--bg:#f6f4f0;--pn:#fff;--ink:#26221d;--soft:#6b6459;--ln:#d9d4ca;--ac:#b4401f;--ai:#fff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -38,7 +38,7 @@ input,textarea,select{display:block;width:100%;margin-top:4px;font:inherit;font-
 </style>
 </head>
 <body>
-<header><h1>Social Media Content Generator</h1><span id="st" role="status">Memuat…</span></header>
+<header><h1>CMS Carousel</h1><span id="st" role="status">Memuat…</span></header>
 <main>
 <section>
 <div class="tabs" id="tabs"></div>
@@ -50,7 +50,7 @@ input,textarea,select{display:block;width:100%;margin-top:4px;font:inherit;font-
 <aside class="pv">
 <div class="card" style="margin-bottom:12px"><label>Platform<select id="pf"></select></label><label>Rasio<select id="rt"></select></label><label style="display:flex;gap:8px;align-items:center;margin:0"><input type="checkbox" id="sz" checked style="width:auto;margin:0"> Tampilkan zona aman di pratinjau</label><p class="note" id="fn"></p></div>
 <canvas id="pc" aria-label="Pratinjau slide"></canvas>
-<div class="tools" style="margin-top:12px"><button class="pri" data-a="png">Unduh PNG slide ini</button><button data-a="all">Unduh semua</button><button data-a="reset">Reset ke awal</button></div>
+<div class="tools" style="margin-top:12px"><button class="pri" data-a="png">Unduh PNG slide ini</button><button data-a="zip">Unduh semua (ZIP)</button><button data-a="all">Satu per satu</button><button data-a="reset">Reset ke awal</button></div>
 <p class="note">Perubahan tersimpan otomatis. Tiap unduhan meminta konfirmasi dari browser. Pratinjau sama dengan hasil PNG. Area merah hanya tampil di pratinjau.</p>
 </aside>
 </main>
@@ -133,9 +133,20 @@ $('pf').onchange=function(){F.p=this.value;F.r=PL[F.p].d;$('rt').value=F.r;note(
 $('rt').onchange=function(){F.r=this.value;note();preview();save()};
 $('sz').onchange=preview;
 var dl=null;
+var CT=(function(){var t=[],n,k,c;for(n=0;n<256;n++){c=n;for(k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t.push(c>>>0)}return t})();
+function crc(u){var c=-1;for(var i=0;i<u.length;i++)c=CT[(c^u[i])&255]^(c>>>8);return(c^-1)>>>0}
+function zip(fs){var P=[],C=[],off=0,d=new Date(),tm=(d.getHours()<<11)|(d.getMinutes()<<5)|(d.getSeconds()>>1),dt=((d.getFullYear()-1980)<<9)|((d.getMonth()+1)<<5)|d.getDate(),en=new TextEncoder();
+fs.forEach(function(f){var nm=en.encode(f.name),cr=crc(f.data),n=f.data.length,h=new DataView(new ArrayBuffer(30)),ch=new DataView(new ArrayBuffer(46));
+h.setUint32(0,0x04034b50,true);h.setUint16(4,20,true);h.setUint16(6,0x0800,true);h.setUint16(10,tm,true);h.setUint16(12,dt,true);h.setUint32(14,cr,true);h.setUint32(18,n,true);h.setUint32(22,n,true);h.setUint16(26,nm.length,true);
+ch.setUint32(0,0x02014b50,true);ch.setUint16(4,20,true);ch.setUint16(6,20,true);ch.setUint16(8,0x0800,true);ch.setUint16(12,tm,true);ch.setUint16(14,dt,true);ch.setUint32(16,cr,true);ch.setUint32(20,n,true);ch.setUint32(24,n,true);ch.setUint16(28,nm.length,true);ch.setUint32(42,off,true);
+P.push(h.buffer,nm,f.data);C.push(ch.buffer,nm);off+=30+nm.length+n});
+var cs=0;C.forEach(function(x){cs+=x.byteLength});var e=new DataView(new ArrayBuffer(22));e.setUint32(0,0x06054b50,true);e.setUint16(8,fs.length,true);e.setUint16(10,fs.length,true);e.setUint32(12,cs,true);e.setUint32(16,off,true);
+return new Blob(P.concat(C,[e.buffer]),{type:'application/zip'})}
+async function saveBlob(b,fn){try{if(dl)await dl.save({filename:fn,data:b});else{var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=fn;document.body.appendChild(a);a.click();a.remove();await new Promise(function(r){setTimeout(r,500)});URL.revokeObjectURL(a.href)}status('Berkas diunduh');return true}catch(x){status(x&&x.code==='declined'?'Unduhan dibatalkan':'Unduhan gagal');return false}}
 async function saveOne(i){try{var b=await draw(i),fn='slide-'+(i+1)+'-'+F.r.replace(':','x')+'.png';if(dl)await dl.save({filename:fn,data:b});else{var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=fn;document.body.appendChild(a);a.click();a.remove();await new Promise(function(r){setTimeout(r,500)});URL.revokeObjectURL(a.href)}return true}catch(x){status(x&&x.code==='declined'?'Unduhan dibatalkan':'Unduhan gagal');return false}}
 document.addEventListener('click',async function(ev){var b=ev.target.closest('[data-a]');if(!b)return;var a=b.dataset.a;
 if(a==='png'){if(await saveOne(cur))status('Slide diunduh')}
+else if(a==='zip'){status('Menyiapkan ZIP…');var fl=[];for(var j=0;j<S.length;j++){var bl=await draw(j);fl.push({name:'slide-'+String(j+1).padStart(2,'0')+'-'+F.r.replace(':','x')+'.png',data:new Uint8Array(await bl.arrayBuffer())})}await saveBlob(zip(fl),'carousel-'+F.r.replace(':','x')+'.zip')}
 else if(a==='all'){for(var i=0;i<S.length;i++){if(!(await saveOne(i)))break}}
 else if(a==='reset'){if(confirm('Kembalikan semua slide ke isi awal? Perubahan kamu akan hilang.')){S=norm(clone(DEF));cur=0;all();save()}}
 else if(a==='add'){S.splice(cur+1,0,{t:'s',tag:'',title:'Judul baru',stat:'0',label:'Keterangan angka',pts:[['Tahun','Isi poin']],close:'',src:'Sumber: '});cur++;all();save()}
